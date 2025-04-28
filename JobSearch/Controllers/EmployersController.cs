@@ -1,0 +1,59 @@
+﻿using JobSearch.Domains.Services.Contracts;
+using JobSearch.Domains.ValueObjects;
+using Microsoft.AspNetCore.Mvc;
+
+namespace JobSearch.Web.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class EmployersController : ControllerBase
+    {
+        private readonly IEmployerService _service;
+
+        public EmployersController(IEmployerService service)
+        {
+            _service = service;
+        }
+        /// <summary>
+        /// Создать нового работодателя.
+        /// </summary>
+        [HttpPost]
+        public async Task<IActionResult> Create([FromQuery] EmployerDto dto)
+        {
+            var employer = await _service.CreateAsync(dto);
+            return CreatedAtAction(nameof(Get), new { id = employer.EmployerId }, employer);
+        }
+
+        /// <summary>
+        /// Получить работодателя по ID.
+        /// </summary>
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var employer = await _service.GetByIdAsync(id);
+            if (employer == null)
+                return NotFound();
+            return Ok(employer);
+        }
+
+        /// <summary>
+        /// Обновить информацию о работодателе.
+        /// </summary>
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromQuery] EmployerDto dto)
+        {
+            await _service.UpdateAsync(id, dto);
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Удалить работодателя.
+        /// </summary>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _service.DeleteAsync(id);
+            return NoContent();
+        }
+    }
+}

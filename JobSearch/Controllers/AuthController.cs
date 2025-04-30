@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
-namespace JobSearch.Web.Controller
+namespace JobSearch.Web.Controllers
 {
     /// <summary>
     /// Контроллер для аутентификации пользователя: регистрация, вход и выход.

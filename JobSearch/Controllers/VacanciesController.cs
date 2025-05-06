@@ -89,19 +89,17 @@ namespace JobSearch.Web.Controllers
         [HttpPost("{id}/apply")]
         public async Task<IActionResult> ApplyToVacancy(int id, [FromQuery] ResponceDto dto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Переданы некорректные данные.");
+
             var vacancy = await _vacancyService.GetByIdAsync(id);
             if (vacancy == null)
                 return NotFound("Вакансия не найдена.");
 
-            if (User.Identity is not { IsAuthenticated: true })
-                return Unauthorized("Вы должны быть авторизованы для отклика.");
-
-            // Найти работодателя через вакансию
             var employer = await _employerService.GetByIdAsync(vacancy.EmployerId);
-            if (employer == null)
-                return NotFound("Работодатель не найден для данной вакансии.");
+            if (employer == null || string.IsNullOrWhiteSpace(employer.Email))
+                return NotFound("Не удалось найти почту работодателя.");
 
-            // Создаём отклик
             var application = await _responceService.CreateAsync(dto);
 
             string resumeInfo = string.Empty;
@@ -117,13 +115,19 @@ namespace JobSearch.Web.Controllers
                 }
             }
 
-            // Отправляем письмо работодателю
             var subject = "Новый отклик на вашу вакансию";
-            var body = $"На вакансию '{vacancy.Title}' поступил новый отклик от пользователя с ID {dto.UserId}.\n" +
+            var body = $"На вакансию '{vacancy.Title}' поступил отклик от пользователя с ID {dto.UserId}.\n" +
                        $"{(string.IsNullOrEmpty(dto.CoverLetter) ? "" : $"Сопроводительное письмо:\n{dto.CoverLetter}\n")}" +
                        $"{resumeInfo}";
 
-            await _emailService.SendEmailAsync(employer.Email, subject, body);
+            try
+            {
+                await _emailService.SendEmailAsync(employer.Email, subject, body);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Ошибка при отправке письма: {ex.Message}");
+            }
 
             return Ok(new
             {
@@ -131,5 +135,6 @@ namespace JobSearch.Web.Controllers
                 ApplicationId = application.ResponceId
             });
         }
+
     }
 }

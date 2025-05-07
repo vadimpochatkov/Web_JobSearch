@@ -1,9 +1,10 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.Services.UseCases;
 using JobSearch.Storage;
-using System.Reflection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace JobSearch
 {

@@ -15,7 +15,7 @@ namespace JobSearch.Domains.Entities
 
         public string? Location { get; set; }
 
-        public required Employer Employer { get; set; }
+        public  Employer Employer { get; set; }
 
     }
 }

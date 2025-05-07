@@ -3,7 +3,7 @@ using JobSearch.Domains.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobSearch.Web.Controllers
+namespace JobSearch.Controllers
 {
     [Authorize]
     [ApiController]

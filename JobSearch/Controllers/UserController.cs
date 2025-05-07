@@ -1,9 +1,11 @@
 ﻿using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.ValueObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobSearch.Web.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase

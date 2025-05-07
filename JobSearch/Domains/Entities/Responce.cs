@@ -9,7 +9,7 @@
         public DateTime ResponceDate { get; set; } = DateTime.UtcNow;
         public string? CoverLetter { get; set; }
 
-        public Vacancy Vacancy { get; set; }
-        public User User { get; set; }
+        public required Vacancy Vacancy { get; set; }
+        public required User User { get; set; }
     }
 }

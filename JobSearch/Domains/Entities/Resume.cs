@@ -4,12 +4,12 @@
     {
         public int ResumeId { get; set; }
         public int UserId { get; set; }
-        public string Title { get; set; }
+        public required string Title { get; set; }
         public string? Education { get; set; }
-        public string Experience { get; set; }
+        public required string Experience { get; set; }
 
         public DateOnly? DateofBirth => User?.DateofBirth;
 
-        public User User { get; set; }
+        public required User User { get; set; }
     }
 }

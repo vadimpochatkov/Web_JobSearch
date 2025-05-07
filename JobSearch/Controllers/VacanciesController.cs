@@ -8,27 +8,13 @@ namespace JobSearch.Web.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class VacanciesController : ControllerBase
-    {
-        private readonly IVacancyService _vacancyService;
-        private readonly IResponceService _responceService;
-        private readonly IEmailService _emailService;
-        private readonly IResumeService _resumeService;
-        private readonly IEmployerService _employerService;
-
-        public VacanciesController(
-            IVacancyService vacancyService,
+    public class VacanciesController(IVacancyService vacancyService,
             IResponceService responceService,
             IEmailService emailService,
             IResumeService resumeService,
-            IEmployerService employerService)
-        {
-            _vacancyService = vacancyService;
-            _responceService = responceService;
-            _emailService = emailService;
-            _resumeService = resumeService; 
-            _employerService = employerService;
-        }
+            IEmployerService employerService) : ControllerBase
+    {
+       
 
         /// <summary>
         /// Создать новую вакансию.
@@ -36,7 +22,7 @@ namespace JobSearch.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromQuery] VacancyDto dto)
         {
-            var vacancy = await _vacancyService.CreateAsync(dto);
+            var vacancy = await vacancyService.CreateAsync(dto);
             return CreatedAtAction(nameof(Get), new { id = vacancy.VacancyId }, vacancy);
         }
 
@@ -46,7 +32,7 @@ namespace JobSearch.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var vacancies = await _vacancyService.GetAllAsync();
+            var vacancies = await vacancyService.GetAllAsync();
             return Ok(vacancies);
         }
 
@@ -56,7 +42,7 @@ namespace JobSearch.Web.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var vacancy = await _vacancyService.GetByIdAsync(id);
+            var vacancy = await vacancyService.GetByIdAsync(id);
             if (vacancy == null)
                 return NotFound();
             return Ok(vacancy);
@@ -68,7 +54,7 @@ namespace JobSearch.Web.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromQuery] VacancyDto dto)
         {
-            await _vacancyService.UpdateAsync(id, dto);
+            await vacancyService.UpdateAsync(id, dto);
             return NoContent();
         }
 
@@ -78,7 +64,7 @@ namespace JobSearch.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            await _vacancyService.DeleteAsync(id);
+            await vacancyService.DeleteAsync(id);
             return NoContent();
         }
 
@@ -92,20 +78,20 @@ namespace JobSearch.Web.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Переданы некорректные данные.");
 
-            var vacancy = await _vacancyService.GetByIdAsync(id);
+            var vacancy = await vacancyService.GetByIdAsync(id);
             if (vacancy == null)
                 return NotFound("Вакансия не найдена.");
 
-            var employer = await _employerService.GetByIdAsync(vacancy.EmployerId);
+            var employer = await employerService.GetByIdAsync(vacancy.EmployerId);
             if (employer == null || string.IsNullOrWhiteSpace(employer.Email))
                 return NotFound("Не удалось найти почту работодателя.");
 
-            var application = await _responceService.CreateAsync(dto);
+            var application = await responceService.CreateAsync(dto);
 
             string resumeInfo = string.Empty;
             if (dto.ResumeId.HasValue)
             {
-                var resume = await _resumeService.GetResumeByIdAsync(dto.ResumeId.Value);
+                var resume = await resumeService.GetResumeByIdAsync(dto.ResumeId.Value);
                 if (resume != null)
                 {
                     resumeInfo = $"\n\nРезюме:\n" +
@@ -122,7 +108,7 @@ namespace JobSearch.Web.Controllers
 
             try
             {
-                await _emailService.SendEmailAsync(employer.Email, subject, body);
+                await emailService.SendEmailAsync(employer.Email, subject, body);
             }
             catch (Exception ex)
             {

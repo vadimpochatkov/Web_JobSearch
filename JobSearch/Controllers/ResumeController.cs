@@ -45,7 +45,7 @@ namespace JobSearch.Web.Controllers
         /// </summary>
         /// <param name="id">Идентификатор резюме.</param>
         /// <returns>Резюме, если найдено.</returns>
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var resume = await _resumeService.GetResumeByIdAsync(id);
@@ -60,7 +60,7 @@ namespace JobSearch.Web.Controllers
         /// </summary>
         /// <param name="id">Идентификатор резюме для обновления.</param>
         /// <param name="dto">Новые данные резюме.</param>
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromQuery] ResumeDto dto)
         {
             await _resumeService.UpdateResumeAsync(id, dto);
@@ -71,7 +71,7 @@ namespace JobSearch.Web.Controllers
         /// Удаление резюме по идентификатору.
         /// </summary>
         /// <param name="id">Идентификатор резюме для удаления.</param>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _resumeService.DeleteResumeAsync(id);

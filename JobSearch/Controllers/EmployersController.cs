@@ -29,7 +29,7 @@ namespace JobSearch.Web.Controllers
         /// <summary>
         /// Получить работодателя по ID.
         /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {
             var employer = await _service.GetByIdAsync(id);
@@ -41,7 +41,7 @@ namespace JobSearch.Web.Controllers
         /// <summary>
         /// Обновить информацию о работодателе.
         /// </summary>
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromQuery] EmployerDto dto)
         {
             await _service.UpdateAsync(id, dto);
@@ -51,7 +51,7 @@ namespace JobSearch.Web.Controllers
         /// <summary>
         /// Удалить работодателя.
         /// </summary>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);

@@ -37,13 +37,13 @@ namespace JobSearch
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection")));
 
-            builder.Services.AddTransient<IRepository, Repository>();
-            builder.Services.AddTransient<IAuthService, AuthService>();
-            builder.Services.AddTransient<IUserService, UserService>();
-            builder.Services.AddTransient<IEmployerService, EmployerService>();
-            builder.Services.AddTransient<IResumeService, ResumeService>();
-            builder.Services.AddTransient<IVacancyService, VacancyService>();
-            builder.Services.AddTransient<IResponceService, ResponceService>();
+            builder.Services.AddScoped<IRepository, Repository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IEmployerService, EmployerService>();
+            builder.Services.AddScoped<IResumeService, ResumeService>();
+            builder.Services.AddScoped<IVacancyService, VacancyService>();
+            builder.Services.AddScoped<IResponceService, ResponceService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

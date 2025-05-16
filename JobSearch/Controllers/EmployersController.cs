@@ -16,14 +16,16 @@ namespace JobSearch.Web.Controllers
         {
             _service = service;
         }
+
         /// <summary>
         /// Создать нового работодателя.
         /// </summary>
+        /// <param name="dto"></param>
         [HttpPost]
         public async Task<IActionResult> Create([FromQuery] EmployerDto dto)
         {
             var employer = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(Get), new { id = employer.EmployerId }, employer);
+            return Ok(employer); 
         }
 
         /// <summary>

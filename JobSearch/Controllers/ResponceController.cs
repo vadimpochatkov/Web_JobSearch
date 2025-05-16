@@ -47,7 +47,7 @@ namespace JobSearch.Web.Controllers
         public async Task<IActionResult> Create([FromQuery] ResponceDto dto)
         {
             var response = await _service.CreateAsync(dto);
-            return CreatedAtAction(nameof(Get), new { id = response.ResponceId }, response);
+            return Ok(response);
         }
 
         /// <summary>

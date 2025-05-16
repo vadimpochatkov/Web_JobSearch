@@ -23,7 +23,7 @@ namespace JobSearch.Controllers
         public async Task<IActionResult> Create([FromQuery] VacancyDto dto)
         {
             var vacancy = await vacancyService.CreateAsync(dto);
-            return CreatedAtAction(nameof(Get), new { id = vacancy.VacancyId }, vacancy);
+            return Ok(vacancy);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
-﻿using JobSearch.Domains.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+
+using JobSearch.Domains.Entities;
 
 namespace JobSearch.Storage
 {

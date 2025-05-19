@@ -1,7 +1,8 @@
-﻿using JobSearch.Domains.Services.Contracts;
-using JobSearch.Domains.ValueObjects;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using JobSearch.Domains.Services.Contracts;
+using JobSearch.Domains.ValueObjects;
 
 namespace JobSearch.Web.Controllers
 {

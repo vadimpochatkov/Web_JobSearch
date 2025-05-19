@@ -1,7 +1,8 @@
-﻿using JobSearch.Domains.Services.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+
+using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.Entities;
 using JobSearch.Domains.ValueObjects;
-using Microsoft.EntityFrameworkCore;
 
 namespace JobSearch.Storage
 {

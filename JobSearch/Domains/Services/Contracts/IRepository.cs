@@ -1,6 +1,5 @@
 ﻿using JobSearch.Domains.Entities;
 using JobSearch.Domains.ValueObjects;
-using NuGet.Protocol;
 
 namespace JobSearch.Domains.Services.Contracts
 {

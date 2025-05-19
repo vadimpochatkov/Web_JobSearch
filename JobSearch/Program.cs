@@ -39,7 +39,7 @@ namespace JobSearch
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IEmployerRepository, EmployerRepository>();
-            builder.Services.AddScoped<IResponceRepository, ResponceRepository>();
+            builder.Services.AddScoped<IResponseRepository, ResponseRepository>();
             builder.Services.AddScoped<IVacancyRepository, VacancyRepository>();
             builder.Services.AddScoped<IResumeRepository,ResumeRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -47,7 +47,7 @@ namespace JobSearch
             builder.Services.AddScoped<IEmployerService, EmployerService>();
             builder.Services.AddScoped<IResumeService, ResumeService>();
             builder.Services.AddScoped<IVacancyService, VacancyService>();
-            builder.Services.AddScoped<IResponceService, ResponceService>();
+            builder.Services.AddScoped<IResponseService, ResponseService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

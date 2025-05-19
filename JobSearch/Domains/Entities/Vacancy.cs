@@ -1,4 +1,5 @@
-﻿
+﻿using System.Text.Json.Serialization;
+
 namespace JobSearch.Domains.Entities
 {
     public class Vacancy
@@ -15,6 +16,7 @@ namespace JobSearch.Domains.Entities
 
         public string? Location { get; set; }
 
+        [JsonIgnore]
         public  Employer Employer { get; set; }
 
     }

@@ -2,7 +2,7 @@
 
 namespace JobSearch.Domains.Services.Contracts
 {
-    public interface IResponceRepository
+    public interface IResponseRepository
     {
         Task<Responce> CreateResponceAsync(Responce application);
         Task<Responce> GetResponceByIdAsync(int id);

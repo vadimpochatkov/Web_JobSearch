@@ -4,16 +4,16 @@ using JobSearch.Domains.ValueObjects;
 
 namespace JobSearch.Domains.Services.UseCases
 {
-    public class ResponceService : IResponceService
+    public class ResponseService : IResponseService
     {
-        private readonly IResponceRepository _repository;
+        private readonly IResponseRepository _repository;
 
-        public ResponceService(IResponceRepository repository)
+        public ResponseService(IResponseRepository repository)
         {
             _repository = repository;
         }
 
-        public async Task<Responce> CreateAsync(ResponceDto dto)
+        public async Task<Responce> CreateAsync(ResponseDto dto)
         {
             var responce = new Responce
             {
@@ -35,7 +35,7 @@ namespace JobSearch.Domains.Services.UseCases
             return await _repository.GetResponceByIdAsync(id);
         }
 
-        public async Task UpdateAsync(int id, ResponceDto dto)
+        public async Task UpdateAsync(int id, ResponseDto dto)
         {
             var responce = await _repository.GetResponceByIdAsync(id);
             responce.CoverLetter = dto.CoverLetter;

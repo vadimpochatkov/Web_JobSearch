@@ -2,6 +2,12 @@
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string toEmail, string subject, string body);
+        Task SendVacancyApplicationEmailAsync(
+            string employerEmail,
+            string vacancyTitle,
+            int userId,
+            string coverLetter,
+            int? resumeId = null
+        );
     }
 }

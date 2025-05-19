@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.ValueObjects;
+using System.Net.Mail;
+using System.Text;
+using JobSearch.Domains.Services.UseCases;
 
 
 namespace JobSearch.Controllers
@@ -11,12 +14,13 @@ namespace JobSearch.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class VacanciesController(IVacancyService vacancyService,
-            IResponceService responceService,
+            IResponseService responceService,
             IEmailService emailService,
             IResumeService resumeService,
-            IEmployerService employerService) : ControllerBase
+            IEmployerService employerService,
+            ILogger<VacanciesController> logger) : ControllerBase
     {
-       
+
 
         /// <summary>
         /// Создать новую вакансию.
@@ -75,10 +79,10 @@ namespace JobSearch.Controllers
         /// </summary>
         [Authorize]
         [HttpPost("{id}/apply")]
-        public async Task<IActionResult> ApplyToVacancy(int id, [FromQuery] ResponceDto dto)
+        public async Task<IActionResult> ApplyToVacancy(int id, [FromBody] ResponseDto dto)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Переданы некорректные данные.");
+                return BadRequest(ModelState);
 
             var vacancy = await vacancyService.GetByIdAsync(id);
             if (vacancy == null)
@@ -86,43 +90,28 @@ namespace JobSearch.Controllers
 
             var employer = await employerService.GetByIdAsync(vacancy.EmployerId);
             if (employer == null || string.IsNullOrWhiteSpace(employer.Email))
-                return NotFound("Не удалось найти почту работодателя.");
+                return NotFound("Работодатель не найден или email не указан.");
 
             var application = await responceService.CreateAsync(dto);
-
-            string resumeInfo = string.Empty;
-            if (dto.ResumeId.HasValue)
-            {
-                var resume = await resumeService.GetResumeByIdAsync(dto.ResumeId.Value);
-                if (resume != null)
-                {
-                    resumeInfo = $"\n\nРезюме:\n" +
-                                 $"- Название: {resume.Title}\n" +
-                                 $"- Образование: {resume.Education}\n" +
-                                 $"- Опыт: {resume.Experience}\n";
-                }
-            }
-
-            var subject = "Новый отклик на вашу вакансию";
-            var body = $"На вакансию '{vacancy.Title}' поступил отклик от пользователя с ID {dto.UserId}.\n" +
-                       $"{(string.IsNullOrEmpty(dto.CoverLetter) ? "" : $"Сопроводительное письмо:\n{dto.CoverLetter}\n")}" +
-                       $"{resumeInfo}";
+            if (application == null)
+                return StatusCode(500, "Ошибка при создании отклика.");
 
             try
             {
-                await emailService.SendEmailAsync(employer.Email, subject, body);
+                await emailService.SendVacancyApplicationEmailAsync(
+                    employer.Email,
+                    vacancy.Title,
+                    dto.UserId,
+                    dto.CoverLetter,
+                    dto.ResumeId
+                );
+                return Ok(new { Message = "Отклик успешно отправлен!" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Ошибка при отправке письма: {ex.Message}");
+                logger.LogError(ex, "Ошибка при обработке отклика");
+                return StatusCode(500, "Внутренняя ошибка сервера.");
             }
-
-            return Ok(new
-            {
-                Message = "Отклик успешно отправлен. Работодатель получил уведомление на почту.",
-                ApplicationId = application.ResponceId
-            });
         }
-
     }
 }

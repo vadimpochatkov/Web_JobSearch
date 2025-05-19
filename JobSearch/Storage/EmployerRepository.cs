@@ -22,7 +22,9 @@ namespace JobSearch.Storage
 
         public async Task<Employer> GetEmployerByIdAsync(int id)
         {
-            return await _context.Employer.FindAsync(id);
+            return await _context.Employer
+            .Include("Vacancies") 
+            .FirstOrDefaultAsync(e => e.EmployerId == id);
         }
 
         public async Task UpdateEmployerAsync(Employer employer)

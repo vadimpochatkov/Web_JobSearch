@@ -1,6 +1,6 @@
 ﻿namespace JobSearch.Domains.ValueObjects
 {
-    public class ResponceDto
+    public class ResponseDto
     {
         public int UserId { get; set; }
         public int VacancyId { get; set; }

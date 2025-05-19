@@ -11,9 +11,9 @@ namespace JobSearch.Web.Controllers
     [Route("api/[controller]")]
     public class ResponceController : ControllerBase
     {
-        private readonly IResponceService _service;
+        private readonly IResponseService _service;
 
-        public ResponceController(IResponceService service)
+        public ResponceController(IResponseService service)
         {
             _service = service;
         }
@@ -44,7 +44,7 @@ namespace JobSearch.Web.Controllers
         /// Создать новую заявку на вакансию.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Create([FromQuery] ResponceDto dto)
+        public async Task<IActionResult> Create([FromQuery] ResponseDto dto)
         {
             var response = await _service.CreateAsync(dto);
             return Ok(response);
@@ -54,7 +54,7 @@ namespace JobSearch.Web.Controllers
         /// Обновить данные заявки.
         /// </summary>
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromQuery] ResponceDto dto)
+        public async Task<IActionResult> Update(int id, [FromQuery] ResponseDto dto)
         {
             await _service.UpdateAsync(id, dto);
             return NoContent();

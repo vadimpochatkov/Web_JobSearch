@@ -5,11 +5,11 @@ using JobSearch.Domains.Entities;
 
 namespace JobSearch.Storage
 {
-    public class ResponceRepository : IResponceRepository
+    public class ResponseRepository : IResponseRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public ResponceRepository(ApplicationDbContext context)
+        public ResponseRepository(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }

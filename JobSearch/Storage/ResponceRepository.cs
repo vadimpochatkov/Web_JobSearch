@@ -15,7 +15,7 @@ namespace JobSearch.Storage
         }
         public async Task<Responce> CreateResponceAsync(Responce responce)
         {
-            var userExists = await _context.Users.AnyAsync(u => u.UserId == responce.UserId);
+            var userExists = await _context.User.AnyAsync(u => u.UserId == responce.UserId);
             var vacancyExists = await _context.Vacancy.AnyAsync(v => v.VacancyId == responce.VacancyId);
 
             if (!userExists || !vacancyExists)

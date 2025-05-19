@@ -16,7 +16,7 @@ namespace JobSearch.Storage
         // Resume methods
         public async Task<Resume> CreateResumeAsync(Resume resume)
         {
-            bool userExists = await _context.Users
+            bool userExists = await _context.User
                 .AnyAsync(u => u.UserId == resume.UserId);
 
             if (!userExists)

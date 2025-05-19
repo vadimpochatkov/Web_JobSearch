@@ -19,23 +19,23 @@ namespace JobSearch.Storage
         public async Task<User> CreateUserAsync(RegistrationDto newUserDto)
         {
             var user = newUserDto.ToUser();
-            _context.Users.Add(user);
+            _context.User.Add(user);
             await _context.SaveChangesAsync();
             return user;
         }
 
         public async Task<User> GetUserByIdAsync(int userId)
         {
-            return await _context.Users.FindAsync(userId);
+            return await _context.User.FindAsync(userId);
         }
         public async Task<User> GetUserByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.User.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
-            return await _context.Users
+            return await _context.User
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -47,7 +47,7 @@ namespace JobSearch.Storage
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User existingUser = await _context.Users.FindAsync(user.UserId);
+            User existingUser = await _context.User.FindAsync(user.UserId);
             if (existingUser == null)
             {
                 throw new KeyNotFoundException($"User with ID {user.UserId} not found");
@@ -59,13 +59,13 @@ namespace JobSearch.Storage
 
         public async Task DeleteUserAsync(int userId)
         {
-            User user = await _context.Users.FindAsync(userId);
+            User user = await _context.User.FindAsync(userId);
             if (user == null)
             {
                 throw new KeyNotFoundException($"User with ID {userId} not found");
             }
 
-            _context.Users.Remove(user);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
         }
     }

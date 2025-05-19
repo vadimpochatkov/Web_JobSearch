@@ -6,12 +6,9 @@ namespace JobSearch.Domains.Services.UseCases
 {
     public class AuthService : IAuthService
     {
-        private readonly IRepository _repository;
+        private readonly IUserRepository _repository;
 
-        public AuthService(IRepository repository)
-        {
-            _repository = repository;
-        }
+        public AuthService(IUserRepository repository) => _repository = repository;
 
         public async Task<User> RegisterAsync(RegistrationDto newuser)
         {

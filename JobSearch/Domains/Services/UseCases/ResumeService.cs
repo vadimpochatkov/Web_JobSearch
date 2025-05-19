@@ -5,9 +5,9 @@ using JobSearch.Domains.ValueObjects;
 namespace JobSearch.Domains.Services.UseCases;
 public class ResumeService : IResumeService
 {
-    private readonly IRepository _repository;
+    private readonly IResumeRepository _repository;
 
-    public ResumeService(IRepository repository)
+    public ResumeService(IResumeRepository repository)
     {
         _repository = repository;
     }

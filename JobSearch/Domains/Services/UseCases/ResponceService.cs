@@ -6,9 +6,9 @@ namespace JobSearch.Domains.Services.UseCases
 {
     public class ResponceService : IResponceService
     {
-        private readonly IRepository _repository;
+        private readonly IResponceRepository _repository;
 
-        public ResponceService(IRepository repository)
+        public ResponceService(IResponceRepository repository)
         {
             _repository = repository;
         }

@@ -6,9 +6,9 @@ namespace JobSearch.Domains.Services.UseCases
 {
     public class VacancyService : IVacancyService
     {
-        private readonly IRepository _repository;
+        private readonly IVacancyRepository _repository;
 
-        public VacancyService(IRepository repository)
+        public VacancyService(IVacancyRepository repository)
         {
             _repository = repository;
         }

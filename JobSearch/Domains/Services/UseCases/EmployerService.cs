@@ -6,9 +6,9 @@ namespace JobSearch.Domains.Services.UseCases
 {
     public class EmployerService : IEmployerService
     {
-        private readonly IRepository _repository;
+        private readonly IEmployerRepository _repository;
 
-        public EmployerService(IRepository repository)
+        public EmployerService(IEmployerRepository repository)
         {
             _repository = repository;
         }

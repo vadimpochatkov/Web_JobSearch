@@ -6,9 +6,9 @@ namespace JobSearch.Domains.Services.UseCases
 {
     public class UserService : IUserService
     {
-        private readonly IRepository _repository;
+        private readonly IUserRepository _repository;
 
-        public UserService(IRepository repository)
+        public UserService(IUserRepository repository)
         {
             _repository = repository;
         }

@@ -1,4 +1,4 @@
-﻿чusing System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace JobSearch.Domains.Entities
 {

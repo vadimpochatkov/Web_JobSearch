@@ -32,7 +32,7 @@ namespace JobSearch.Web.Controllers
         /// <param name="newUser">Данные для регистрации пользователя.</param>
         /// <returns>Результат регистрации пользователя и автоматического входа.</returns>
         /// <response code="200">Успешная регистрация и вход.</response>
-        /// <response code="400">Ошибка регистрации.</response>
+        /// <response code="404">Ошибка регистрации.</response>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromQuery] RegistrationDto newUser)
         {

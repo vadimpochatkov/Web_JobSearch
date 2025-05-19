@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+﻿чusing System.Text.Json.Serialization;
 
 namespace JobSearch.Domains.Entities
 {
@@ -16,7 +16,5 @@ namespace JobSearch.Domains.Entities
         public required string Password { get; set; }
 
         public DateOnly? DateofBirth { get; set; }
-
-
     }
 }

@@ -40,5 +40,8 @@ namespace JobSearch.Domains.Entities
         /// Формат: ГГГГ-ММ-ДД.
         /// </remarks>
         public DateOnly? DateofBirth { get; set; }
+        
+        [JsonIgnore]
+        public Resume Resume { get; set; }
     }
 }

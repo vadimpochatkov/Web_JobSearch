@@ -29,7 +29,7 @@
         /// <summary>
         /// Дата и время создания отклика.
         /// </summary>
-        public DateTime ResponseDate { get; set; } = DateTime.UtcNow;
+        public DateTime ResponseDate { get; set; } = DateTime.Now;
 
         /// <summary>
         /// Сопроводительное письмо, прикрепленное к отклику.
@@ -45,6 +45,6 @@
 
         public User User { get; set; }
 
-        public Resume? Resume { get; set; }
+        public Resume Resume { get; set; }
     }
 }

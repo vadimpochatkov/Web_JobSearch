@@ -29,7 +29,7 @@ namespace JobSearch.Storage
         public async Task<Response> GetResponseByIdAsync(int id)
         {
             return await _context.Response
-                .Include(r => r.User)
+                .Include(r => r.User)           
                 .Include(r => r.Vacancy)
                 .FirstOrDefaultAsync(r => r.ResponseId == id);
         }
@@ -55,8 +55,12 @@ namespace JobSearch.Storage
 
         public async Task<IEnumerable<Response>> GetAllResponsesAsync()
         {
-            return await _context.Response.ToListAsync();
+            return await _context.Response
+                .Include(r => r.Vacancy)
+                .Include(r => r.User)
+                .ToListAsync();
         }
+
 
         public async Task<List<Response>> GetResponsesByUserAsync(int userId)
         {

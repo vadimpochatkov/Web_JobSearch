@@ -24,7 +24,7 @@ namespace JobSearch.Web.Controllers
         /// <param name="dto">Данные для создания резюме.</param>
         /// <returns>Созданное резюме.</returns>
         [HttpPost("create")]
-        public async Task<IActionResult> Create([FromQuery] ResumeDto dto)
+        public async Task<IActionResult> Create([FromQuery] ResumeRequest dto)
         {
             var resume = await _resumeService.CreateResumeAsync(dto);
             return Ok(resume);
@@ -62,7 +62,7 @@ namespace JobSearch.Web.Controllers
         /// <param name="id">Идентификатор резюме для обновления.</param>
         /// <param name="dto">Новые данные резюме.</param>
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromQuery] ResumeDto dto)
+        public async Task<IActionResult> Update(int id, [FromQuery] ResumeRequest dto)
         {
             await _resumeService.UpdateResumeAsync(id, dto);
             return NoContent();

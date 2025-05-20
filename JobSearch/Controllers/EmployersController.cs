@@ -23,7 +23,7 @@ namespace JobSearch.Web.Controllers
         /// </summary>
         /// <param name="dto"></param>
         [HttpPost]
-        public async Task<IActionResult> Create([FromQuery] EmployerDto dto)
+        public async Task<IActionResult> Create([FromQuery] EmployerRequest dto)
         {
             var employer = await _service.CreateAsync(dto);
             return Ok(employer); 
@@ -45,7 +45,7 @@ namespace JobSearch.Web.Controllers
         /// Обновить информацию о работодателе.
         /// </summary>
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromQuery] EmployerDto dto)
+        public async Task<IActionResult> Update(int id, [FromQuery] EmployerRequest dto)
         {
             await _service.UpdateAsync(id, dto);
             return NoContent();

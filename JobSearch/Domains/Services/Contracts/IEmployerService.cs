@@ -5,9 +5,9 @@ namespace JobSearch.Domains.Services.Contracts
 {
     public interface IEmployerService
     {
-        Task<Employer> CreateAsync(EmployerDto dto);
+        Task<Employer> CreateAsync(EmployerRequest dto);
         Task<Employer> GetByIdAsync(int id);
-        Task UpdateAsync(int id, EmployerDto dto);
+        Task UpdateAsync(int id, EmployerRequest dto);
         Task DeleteAsync(int id);
     }
 }

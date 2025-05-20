@@ -18,7 +18,7 @@ namespace JobSearch.Domains.Services.UseCases
             return await _repository.GetUserByIdAsync(id);
         }
 
-        public async Task UpdateAsync(int id, UserDto dto)
+        public async Task UpdateAsync(int id, UserRequest dto)
         {
             var user = await _repository.GetUserByIdAsync(id);
             if (user == null) throw new Exception("User not found");

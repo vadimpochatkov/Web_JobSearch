@@ -13,7 +13,7 @@ namespace JobSearch.Domains.Services.UseCases
             _repository = repository;
         }
 
-        public async Task<Vacancy> CreateAsync(VacancyDto dto)
+        public async Task<Vacancy> CreateAsync(VacancyRequest dto)
         {
             var vacancy = new Vacancy
             {
@@ -36,7 +36,7 @@ namespace JobSearch.Domains.Services.UseCases
             return await _repository.GetVacancyByIdAsync(id);
         }
 
-        public async Task UpdateAsync(int id, VacancyDto dto)
+        public async Task UpdateAsync(int id, VacancyRequest dto)
         {
             var vacancy = await _repository.GetVacancyByIdAsync(id);
             vacancy.Title = dto.Title;

@@ -12,7 +12,7 @@ public class ResumeService : IResumeService
         _repository = repository;
     }
 
-    public async Task<Resume> CreateResumeAsync(ResumeDto dto)
+    public async Task<Resume> CreateResumeAsync(ResumeRequest dto)
     {
         var resume = new Resume
         {
@@ -39,7 +39,7 @@ public class ResumeService : IResumeService
         return await _repository.GetResumeByIdAsync(id);
     }
 
-    public async Task UpdateResumeAsync(int id, ResumeDto dto)
+    public async Task UpdateResumeAsync(int id, ResumeRequest dto)
     {
         var resume = await _repository.GetResumeByIdAsync(id);
         resume.Title = dto.Title;

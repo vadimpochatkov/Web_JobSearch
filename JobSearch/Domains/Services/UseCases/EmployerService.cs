@@ -13,7 +13,7 @@ namespace JobSearch.Domains.Services.UseCases
             _repository = repository;
         }
 
-        public async Task<Employer> CreateAsync(EmployerDto dto)
+        public async Task<Employer> CreateAsync(EmployerRequest dto)
         {
             var employer = new Employer
             {
@@ -29,7 +29,7 @@ namespace JobSearch.Domains.Services.UseCases
             return await _repository.GetEmployerByIdAsync(id);
         }
 
-        public async Task UpdateAsync(int id, EmployerDto dto)
+        public async Task UpdateAsync(int id, EmployerRequest dto)
         {
             var employer = await _repository.GetEmployerByIdAsync(id);
             employer.CompanyName = dto.CompanyName;

@@ -1,41 +1,47 @@
-﻿using System.Net;
-using System.Net.Mail;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+﻿using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
+using System.Text;
+
 using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.Entities;
-using System.Text;
 
 namespace JobSearch.Domains.Services.UseCases
 {
     public class EmailService(
         IConfiguration configuration,
         IResumeService resumeService,
+        IVacancyService vacancyService,
+        IUserService userService,
         ILogger<EmailService> logger
     ) : IEmailService
     {
         private readonly IConfiguration _configuration = configuration;
         private readonly IResumeService _resumeService = resumeService;
+        private readonly IVacancyService _vacancyService = vacancyService;
+        private readonly IUserService _userService = userService;
         private readonly ILogger<EmailService> _logger = logger;
 
-        public async Task SendVacancyApplicationEmailAsync(
-            string employerEmail,
-            string vacancyTitle,
-            int userId,
-            string coverLetter,
-            int? resumeId = null
-        )
+        public async Task SendVacancyApplicationEmailAsync(Responce responce)
         {
-            // Формирование тела письма
-            var body = new StringBuilder();
-            body.AppendLine($"Пользователь с ID {userId} откликнулся на вакансию: {vacancyTitle}.");
-            body.AppendLine($"Дата отклика: {DateTime.UtcNow:g}");
-            body.AppendLine($"Сопроводительное письмо:\n{coverLetter}");
+            var vacancy = responce.Vacancy ?? await _vacancyService.GetByIdAsync(responce.VacancyId);
+            var user = responce.User ?? await _userService.GetByIdAsync(responce.UserId);
+            var employerEmail = vacancy?.Employer?.Email;
 
-            // Добавление информации о резюме
-            if (resumeId.HasValue)
+            if (string.IsNullOrEmpty(employerEmail))
             {
-                var resume = await _resumeService.GetResumeByIdAsync(resumeId.Value);
+                _logger.LogWarning("Не удалось определить email работодателя");
+                return;
+            }
+
+            var body = new StringBuilder();
+            body.AppendLine($"Пользователь {user?.Name ?? $"с ID {responce.UserId}"} откликнулся на вакансию: {vacancy?.Title ?? "Неизвестно"}.");
+            body.AppendLine($"Дата отклика: {responce.ResponceDate:g}");
+            body.AppendLine($"Сопроводительное письмо:\n{responce.CoverLetter}");
+
+            if (responce.ResumeId.HasValue)
+            {
+                var resume = await _resumeService.GetResumeByIdAsync(responce.ResumeId.Value);
                 if (resume != null)
                 {
                     body.AppendLine("\nРезюме:")
@@ -45,34 +51,36 @@ namespace JobSearch.Domains.Services.UseCases
                 }
             }
 
-            // Настройки SMTP
-            var smtpClient = new SmtpClient(_configuration["Email:SmtpServer"])
-            {
-                Port = int.Parse(_configuration["Email:Port"]),
-                Credentials = new NetworkCredential(
-                    _configuration["Email:Username"],
-                    _configuration["Email:Password"]
-                ),
-                EnableSsl = true,
-                Timeout = 15000
-            };
+            var message = new MimeMessage();
+            message.From.Add(MailboxAddress.Parse(_configuration["Email:From"]));
+            message.To.Add(MailboxAddress.Parse(employerEmail));
+            message.Subject = $"Новый отклик на вакансию: {vacancy?.Title ?? "Без названия"}";
 
-            var mailMessage = new MailMessage
+            message.Body = new TextPart("plain")
             {
-                From = new MailAddress(_configuration["Email:From"]),
-                Subject = $"Новый отклик на вакансию: {vacancyTitle}",
-                Body = body.ToString(),
-                IsBodyHtml = false
+                Text = body.ToString()
             };
-            mailMessage.To.Add(employerEmail);
 
             try
             {
-                await smtpClient.SendMailAsync(mailMessage);
+                using var client = new SmtpClient();
+                await client.ConnectAsync(
+                    _configuration["Email:SmtpServer"],
+                    int.Parse(_configuration["Email:Port"]),
+                    SecureSocketOptions.SslOnConnect
+                );
+
+                await client.AuthenticateAsync(
+                    _configuration["Email:Username"] ?? _configuration["Email:From"],
+                    _configuration["Email:Password"]
+                );
+
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Ошибка отправки письма");
+                _logger.LogError(ex, "Ошибка при отправке письма работодателю (MailKit)");
                 throw;
             }
         }

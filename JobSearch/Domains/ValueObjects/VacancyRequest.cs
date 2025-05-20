@@ -1,6 +1,6 @@
 ﻿namespace JobSearch.Domains.ValueObjects
 {
-    public class VacancyDto
+    public class VacancyRequest
     {
         public int EmployerId { get; set; } 
         public required string Title { get; set; }

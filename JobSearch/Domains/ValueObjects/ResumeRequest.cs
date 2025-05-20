@@ -1,6 +1,6 @@
 ﻿
 namespace JobSearch.Domains.ValueObjects;
-public class ResumeDto
+public class ResumeRequest
 {
     public int UserId { get; set; }
     public required string Title { get; set; }

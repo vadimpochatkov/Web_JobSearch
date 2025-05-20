@@ -3,9 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.ValueObjects;
-using System.Net.Mail;
-using System.Text;
-using JobSearch.Domains.Services.UseCases;
+
 
 
 namespace JobSearch.Controllers
@@ -16,6 +14,7 @@ namespace JobSearch.Controllers
     public class VacanciesController(IVacancyService vacancyService,
             IResponseService responceService,
             IEmailService emailService,
+            IUserService userService,
             IResumeService resumeService,
             IEmployerService employerService,
             ILogger<VacanciesController> logger) : ControllerBase
@@ -26,7 +25,7 @@ namespace JobSearch.Controllers
         /// Создать новую вакансию.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Create([FromQuery] VacancyDto dto)
+        public async Task<IActionResult> Create([FromQuery] VacancyRequest dto)
         {
             var vacancy = await vacancyService.CreateAsync(dto);
             return Ok(vacancy);
@@ -58,7 +57,7 @@ namespace JobSearch.Controllers
         /// Обновить информацию о вакансии.
         /// </summary>
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromQuery] VacancyDto dto)
+        public async Task<IActionResult> Update(int id, [FromQuery] VacancyRequest dto)
         {
             await vacancyService.UpdateAsync(id, dto);
             return NoContent();
@@ -77,39 +76,31 @@ namespace JobSearch.Controllers
         /// <summary>
         /// Откликнуться на вакансию (с прикреплением резюме и уведомлением работодателя).
         /// </summary>
-        [Authorize]
-        [HttpPost("{id}/apply")]
-        public async Task<IActionResult> ApplyToVacancy(int id, [FromBody] ResponseDto dto)
+        [HttpPost("{vacancyId}/apply")]
+        public async Task<IActionResult> ApplyToVacancy(int vacancyId, [FromQuery] ResponseDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var vacancy = await vacancyService.GetByIdAsync(id);
-            if (vacancy == null)
-                return NotFound("Вакансия не найдена.");
-
-            var employer = await employerService.GetByIdAsync(vacancy.EmployerId);
-            if (employer == null || string.IsNullOrWhiteSpace(employer.Email))
-                return NotFound("Работодатель не найден или email не указан.");
-
-            var application = await responceService.CreateAsync(dto);
-            if (application == null)
-                return StatusCode(500, "Ошибка при создании отклика.");
-
             try
             {
-                await emailService.SendVacancyApplicationEmailAsync(
-                    employer.Email,
-                    vacancy.Title,
-                    dto.UserId,
-                    dto.CoverLetter,
-                    dto.ResumeId
-                );
-                return Ok(new { Message = "Отклик успешно отправлен!" });
+                dto.VacancyId = vacancyId;
+
+                var response = await responceService.CreateAsync(dto);
+                if (response == null)
+                    return StatusCode(500, "Не удалось создать отклик.");
+
+                var vacancy = await vacancyService.GetByIdAsync(vacancyId);
+                var employer = await employerService.GetByIdAsync(vacancy.EmployerId);
+                var user = await userService.GetByIdAsync(dto.UserId);
+
+                await emailService.SendVacancyApplicationEmailAsync(response);
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Ошибка при обработке отклика");
+                logger.LogError(ex, "Ошибка при отклике на вакансию.");
                 return StatusCode(500, "Внутренняя ошибка сервера.");
             }
         }

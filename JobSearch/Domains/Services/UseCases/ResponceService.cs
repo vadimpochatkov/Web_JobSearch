@@ -12,7 +12,17 @@ namespace JobSearch.Domains.Services.UseCases
         {
             _repository = repository;
         }
-
+        public async Task<Responce> CreateAsync(ResponseRequest newresponse)
+        {
+            var response = new Responce
+            {
+                UserId = newresponse.UserId,
+                VacancyId = newresponse.VacancyId,
+                CoverLetter = newresponse.CoverLetter,
+                Status = "Pending"
+            };
+            return await _repository.CreateResponceAsync(response);
+        }
         public async Task<Responce> CreateAsync(ResponseDto dto)
         {
             var responce = new Responce
@@ -35,10 +45,10 @@ namespace JobSearch.Domains.Services.UseCases
             return await _repository.GetResponceByIdAsync(id);
         }
 
-        public async Task UpdateAsync(int id, ResponseDto dto)
+        public async Task UpdateAsync(int id, ResponseRequest updateresponse)
         {
             var responce = await _repository.GetResponceByIdAsync(id);
-            responce.CoverLetter = dto.CoverLetter;
+            responce.CoverLetter = updateresponse.CoverLetter;
             await _repository.UpdateResponceAsync(responce);
         }
 

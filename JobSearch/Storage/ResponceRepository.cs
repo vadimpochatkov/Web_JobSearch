@@ -13,54 +13,54 @@ namespace JobSearch.Storage
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<Responce> CreateResponceAsync(Responce responce)
+        public async Task<Response> CreateResponseAsync(Response response)
         {
-            var userExists = await _context.User.AnyAsync(u => u.UserId == responce.UserId);
-            var vacancyExists = await _context.Vacancy.AnyAsync(v => v.VacancyId == responce.VacancyId);
+            var userExists = await _context.User.AnyAsync(u => u.UserId == response.UserId);
+            var vacancyExists = await _context.Vacancy.AnyAsync(v => v.VacancyId == response.VacancyId);
 
             if (!userExists || !vacancyExists)
                 throw new KeyNotFoundException("User or Vacancy not found");
 
-            await _context.Responce.AddAsync(responce);
+            await _context.Response.AddAsync(response);
             await _context.SaveChangesAsync();
-            return responce;
+            return response;
         }
 
-        public async Task<Responce> GetResponceByIdAsync(int id)
+        public async Task<Response> GetResponseByIdAsync(int id)
         {
-            return await _context.Responce
+            return await _context.Response
                 .Include(r => r.User)
                 .Include(r => r.Vacancy)
-                .FirstOrDefaultAsync(r => r.ResponceId == id);
+                .FirstOrDefaultAsync(r => r.ResponseId == id);
         }
 
-        public async Task UpdateResponceAsync(Responce responce)
+        public async Task UpdateResponseAsync(Response response)
         {
-            var existing = await _context.Responce.FindAsync(responce.ResponceId);
+            var existing = await _context.Response.FindAsync(response.ResponseId);
             if (existing == null) throw new KeyNotFoundException("Responce not found");
 
-            existing.CoverLetter = responce.CoverLetter;
-            existing.Status = responce.Status;
+            existing.CoverLetter = response.CoverLetter;
+            existing.Status = response.Status;
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteResponceAsync(int id)
+        public async Task DeleteResponseAsync(int id)
         {
-            var responce = await _context.Responce.FindAsync(id);
-            if (responce == null) throw new KeyNotFoundException("Responce not found");
+            var response = await _context.Response.FindAsync(id);
+            if (response == null) throw new KeyNotFoundException("Responce not found");
 
-            _context.Responce.Remove(responce);
+            _context.Response.Remove(response);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Responce>> GetAllResponcesAsync()
+        public async Task<IEnumerable<Response>> GetAllResponsesAsync()
         {
-            return await _context.Responce.ToListAsync();
+            return await _context.Response.ToListAsync();
         }
 
-        public async Task<List<Responce>> GetResponcesByUserAsync(int userId)
+        public async Task<List<Response>> GetResponsesByUserAsync(int userId)
         {
-            return await _context.Responce
+            return await _context.Response
                 .Where(r => r.UserId == userId)
                 .Include(r => r.Vacancy)
                 .ToListAsync();

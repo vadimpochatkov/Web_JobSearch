@@ -64,7 +64,7 @@ namespace JobSearch.Web.Controllers
         /// <param name="dto">Данные для входа пользователя (Email и Password).</param>
         /// <returns>Результат входа пользователя.</returns>
         /// <response code="200">Успешный вход в систему.</response>
-        /// <response code="401">Неверные данные для входа.</response>
+        /// <response code="400">Неверные данные для входа.</response>
         [HttpGet("login")]
         public async Task<IActionResult> Login([FromQuery] LoginDto dto)
         {

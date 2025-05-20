@@ -44,9 +44,9 @@ namespace JobSearch.Web.Controllers
         /// Создать новую заявку на вакансию.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> Create([FromQuery] ResponseDto dto)
+        public async Task<IActionResult> Create([FromQuery] ResponseRequest newresponse)
         {
-            var response = await _service.CreateAsync(dto);
+            var response = await _service.CreateAsync(newresponse);
             return Ok(response);
         }
 
@@ -54,9 +54,9 @@ namespace JobSearch.Web.Controllers
         /// Обновить данные заявки.
         /// </summary>
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromQuery] ResponseDto dto)
+        public async Task<IActionResult> Update(int id, [FromQuery] ResponseRequest updateresponse)
         {
-            await _service.UpdateAsync(id, dto);
+            await _service.UpdateAsync(id, updateresponse);
             return NoContent();
         }
 

@@ -11,7 +11,7 @@ namespace JobSearch.Storage
         public DbSet<Employer> Employer { get; set; }
         public DbSet<Vacancy> Vacancy { get; set; }
         public DbSet<Resume> Resume { get; set; }
-        public DbSet<Responce> Responce { get; set; }
+        public DbSet<Response> Response { get; set; }
     }
 }
 

@@ -12,49 +12,48 @@ namespace JobSearch.Domains.Services.UseCases
         {
             _repository = repository;
         }
-        public async Task<Responce> CreateAsync(ResponseRequest newresponse)
+        public async Task<Response> CreateAsync(ResponseRequest newresponse)
         {
-            var response = new Responce
+            var response = new Response
             {
                 UserId = newresponse.UserId,
                 VacancyId = newresponse.VacancyId,
                 CoverLetter = newresponse.CoverLetter,
                 Status = "Pending"
             };
-            return await _repository.CreateResponceAsync(response);
+            return await _repository.CreateResponseAsync(response);
         }
-        public async Task<Responce> CreateAsync(ResponseDto dto)
+        public async Task<  Response> CreateAsync(ResponseDto dto)
         {
-            var responce = new Responce
+            var responce = new Response
             {
                 UserId = dto.UserId,
                 VacancyId = dto.VacancyId,
-                CoverLetter = dto.CoverLetter,
                 Status = "Pending"
             };
-            return await _repository.CreateResponceAsync(responce);
+            return await _repository.CreateResponseAsync(responce);
         }
 
-        public async Task<IEnumerable<Responce>> GetAllAsync()
+        public async Task<IEnumerable<Response>> GetAllAsync()
         {
-            return await _repository.GetAllResponcesAsync();
+            return await _repository.GetAllResponsesAsync();
         }
 
-        public async Task<Responce> GetByIdAsync(int id)
+        public async Task<Response> GetByIdAsync(int id)
         {
-            return await _repository.GetResponceByIdAsync(id);
+            return await _repository.GetResponseByIdAsync(id);
         }
 
         public async Task UpdateAsync(int id, ResponseRequest updateresponse)
         {
-            var responce = await _repository.GetResponceByIdAsync(id);
+            var responce = await _repository.GetResponseByIdAsync(id);
             responce.CoverLetter = updateresponse.CoverLetter;
-            await _repository.UpdateResponceAsync(responce);
+            await _repository.UpdateResponseAsync(responce);
         }
 
         public async Task DeleteAsync(int id)
         {
-            await _repository.DeleteResponceAsync(id);
+            await _repository.DeleteResponseAsync(id);
         }
     }
 }

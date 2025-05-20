@@ -3,20 +3,17 @@ using System.Text.Json.Serialization;
 
 namespace JobSearch.Domains.ValueObjects
 {
-    /// <summary>
-    /// Представляет значение для создания или обновления отклика на вакансию.
-    /// </summary>
     public class ResponseDto
     {
+        /// <summary>
+        /// Идентификатор отклика.
+        /// </summary>
+        public int ResponseId { get; set; }
+
         /// <summary>
         /// Идентификатор пользователя.
         /// </summary>
         public int UserId { get; set; }
-
-        // <summary>
-        /// Сопроводительное письмо, прикрепленное к отклику.
-        /// </summary>
-        public string? CoverLetter { get; set; }
 
         /// <summary>
         /// Идентификатор резюме, прикрепленного к отклику.
@@ -26,8 +23,12 @@ namespace JobSearch.Domains.ValueObjects
         /// <summary>
         /// Идентификатор вакансии, на которую отправляется отклик.
         /// </summary>
-        [JsonIgnore]
-        [BindNever]
-        public int VacancyId { get; set; }
+        public int VacancyId { get; set; }  // убрал JsonIgnore и BindNever
+
+        /// <summary>
+        /// Идентификатор работодателя, которому отправляется письмо.
+        /// </summary>
+        public int EmployerId { get; set; } // добавил поле для работодателя
     }
 }
+

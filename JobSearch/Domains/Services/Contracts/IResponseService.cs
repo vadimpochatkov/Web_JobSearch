@@ -13,27 +13,27 @@ namespace JobSearch.Domains.Services.Contracts
         /// </summary>
         /// <param name="dto">Данные для создания отклика.</param>
         /// <returns>Задача, представляющая асинхронную операцию. Результат задачи содержит созданный отклик.</returns>
-        Task<Responce> CreateAsync(ResponseDto dto);
+        Task<Response> CreateAsync(ResponseDto dto);
 
         /// <summary>
         /// Создает новый отклик на вакансию.
         /// </summary>
         /// <param name="newresponse">Данные для создания отклика.</param>
         /// <returns>Задача, представляющая асинхронную операцию. Результат задачи содержит созданный отклик.</returns>
-        Task<Responce> CreateAsync(ResponseRequest newresponse);
+        Task<Response> CreateAsync(ResponseRequest newresponse);
 
         /// <summary>
         /// Получает список всех откликов в системе.
         /// </summary>
         /// <returns>Задача, представляющая асинхронную операцию. Результат задачи содержит коллекцию откликов.</returns>
-        Task<IEnumerable<Responce>> GetAllAsync();
+        Task<IEnumerable<Response>> GetAllAsync();
 
         /// <summary>
         /// Получает отклик по его уникальному идентификатору.
         /// </summary>
         /// <param name="id">Уникальный идентификатор отклика.</param>
         /// <returns>Задача, представляющая асинхронную операцию. Результат задачи содержит отклик, если он найден.</returns>
-        Task<Responce> GetByIdAsync(int id);
+        Task<Response> GetByIdAsync(int id);
 
         /// <summary>
         /// Обновляет информацию об отклике.

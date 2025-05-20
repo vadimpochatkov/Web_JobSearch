@@ -12,6 +12,6 @@ namespace JobSearch.Domains.Services.Contracts
         /// </summary>
         /// <param name="response">Данные отклика на вакансию.</param>
         /// <returns>Задача, представляющая асинхронную операцию отправки электронного письма.</returns>
-        Task SendVacancyApplicationEmailAsync(Response response);
+        Task SendVacancyApplicationEmailAsync(Response response, Vacancy vacancy, Employer employer, User user, Resume? resume = null);
     }
 }

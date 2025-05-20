@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.ValueObjects;
+using JobSearch.Domains.Entities;
+using JobSearch.Domains.Services.UseCases;
 
 
 
@@ -74,33 +76,38 @@ namespace JobSearch.Controllers
         }
 
         /// <summary>
-        /// Откликнуться на вакансию (с прикреплением резюме и уведомлением работодателя).
+        /// Отправить письмо работодателю по уже созданному отклику.
         /// </summary>
-        [HttpPost("{vacancyId}/apply")]
-        public async Task<IActionResult> ApplyToVacancy(int vacancyId, [FromQuery] ResponseDto dto)
+        [HttpPost("send-email")]
+        public async Task<IActionResult> SendEmailForResponse([FromQuery] ResponseDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             try
             {
-                dto.VacancyId = vacancyId;
+                var response = await responceService.GetByIdAsync(dto.ResponseId);
 
-                var response = await responceService.CreateAsync(dto);
-                if (response == null)
-                    return StatusCode(500, "Не удалось создать отклик.");
+                var vacancy = await vacancyService.GetByIdAsync(dto.VacancyId);
+                if (vacancy == null)
+                    return NotFound($"Вакансия с ID {dto.VacancyId} не найдена.");
 
-                var vacancy = await vacancyService.GetByIdAsync(vacancyId);
-                var employer = await employerService.GetByIdAsync(vacancy.EmployerId);
+                var employer = await employerService.GetByIdAsync(dto.EmployerId);
+                if (employer == null)
+                    return NotFound($"Работодатель с ID {dto.EmployerId} не найден.");
+
                 var user = await userService.GetByIdAsync(dto.UserId);
+                if (user == null)
+                    return NotFound($"Пользователь с ID {dto.UserId} не найден.");
 
-                await emailService.SendVacancyApplicationEmailAsync(response);
+                Resume? resume = null;
+                if (dto.ResumeId.HasValue)
+                    resume = await resumeService.GetResumeByIdAsync(dto.ResumeId.Value);
 
-                return Ok(response);
+                await emailService.SendVacancyApplicationEmailAsync(response, vacancy, employer, user, resume);
+
+                return Ok("Письмо успешно отправлено.");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Ошибка при отклике на вакансию.");
+                logger.LogError(ex, "Ошибка при отправке письма по отклику.");
                 return StatusCode(500, "Внутренняя ошибка сервера.");
             }
         }

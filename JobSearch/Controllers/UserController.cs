@@ -27,7 +27,7 @@ namespace JobSearch.Web.Controllers
         {
             var user = await _service.GetByIdAsync(id);
             if (user == null)
-                return NotFound();
+            return NotFound();
             return Ok(user);
         }
 

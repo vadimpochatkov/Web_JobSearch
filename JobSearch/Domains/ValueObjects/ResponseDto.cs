@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Text.Json.Serialization;
-
-namespace JobSearch.Domains.ValueObjects
+﻿namespace JobSearch.Domains.ValueObjects
 {
     public class ResponseDto
     {
@@ -23,12 +20,12 @@ namespace JobSearch.Domains.ValueObjects
         /// <summary>
         /// Идентификатор вакансии, на которую отправляется отклик.
         /// </summary>
-        public int VacancyId { get; set; }  // убрал JsonIgnore и BindNever
+        public int VacancyId { get; set; }  
 
         /// <summary>
         /// Идентификатор работодателя, которому отправляется письмо.
         /// </summary>
-        public int EmployerId { get; set; } // добавил поле для работодателя
+        public int EmployerId { get; set; } 
     }
 }
 

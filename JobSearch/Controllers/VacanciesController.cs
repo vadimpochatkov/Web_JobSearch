@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using JobSearch.Domains.Services.Contracts;
 using JobSearch.Domains.ValueObjects;
 using JobSearch.Domains.Entities;
-using JobSearch.Domains.Services.UseCases;
 
 
 

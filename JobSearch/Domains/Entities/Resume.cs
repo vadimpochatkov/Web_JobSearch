@@ -31,7 +31,7 @@
         public required string Experience { get; set; }
 
         /// <summary>
-        /// Дата рождения пользователя (вычисляемое свойство).
+        /// Дата рождения пользователя.
         /// </summary>
         public DateOnly? DateofBirth => User?.DateofBirth;
 
